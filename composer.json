@@ -31,7 +31,9 @@
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",
-        "symfony/phpunit-bridge": "^3.0"
+        "symfony/phpunit-bridge": "^3.0",
+        "phpstan/phpstan": "^1.7",
+        "phpstan/extension-installer": "^1.1"
     },
     "scripts": {
         "symfony-scripts": [
@@ -62,7 +64,8 @@
     },
     "config": {
         "allow-plugins": {
-            "composer/package-versions-deprecated": true
+            "composer/package-versions-deprecated": true,
+            "phpstan/extension-installer": true
         }
     }
 }
