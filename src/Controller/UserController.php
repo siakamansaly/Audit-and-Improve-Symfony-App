@@ -4,15 +4,17 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserController extends AbstractController
 {
     /**
      * @Route("/users", name="user_list")
+     * @IsGranted("ROLE_ADMIN" , message="Cette page est réservée aux administrateurs")
      */
     public function listAction()
     {
@@ -21,6 +23,7 @@ class UserController extends AbstractController
 
     /**
      * @Route("/users/create", name="user_create")
+     * @IsGranted("ROLE_ADMIN" , message="Cette page est réservée aux administrateurs")
      */
     public function createAction(Request $request, UserPasswordHasherInterface $passwordHasher)
     {
@@ -48,6 +51,7 @@ class UserController extends AbstractController
 
     /**
      * @Route("/users/{id}/edit", name="user_edit")
+     * @IsGranted("ROLE_ADMIN" , message="Cette page est réservée aux administrateurs")
      */
     public function editAction(User $user, Request $request, UserPasswordHasherInterface $passwordHasher)
     {
