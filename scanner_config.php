@@ -12,11 +12,12 @@ $projectPath = getcwd();
  * @see http://api.symfony.com/4.0/Symfony/Component/Finder/Finder.html#method_in
 **/
 $scanDirectories = [
-    $projectPath . '/app/',
+    $projectPath . '/config/',
     $projectPath . '/src/',
-    $projectPath . '/tests/',
-    $projectPath . '/web/',
+    $projectPath . '/templates/',
+    $projectPath . '/public/',
     $projectPath . '/bin/',
+    $projectPath . '/migrations/'
 ];
 
 $scanFiles = [
