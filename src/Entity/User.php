@@ -150,4 +150,13 @@ class User implements UserInterface
 
         return $this;
     }
+
+    /**
+     * Check if user is anonymous.
+     * @return bool
+     */
+    public function isAnonymous() : bool
+    {
+        return 'anonymous' === $this->getUsername();
+    }
 }

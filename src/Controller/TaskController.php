@@ -3,10 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Task;
+use App\Entity\User;
 use App\Form\TaskType;
+use App\Service\UserService;
+use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 
 class TaskController extends AbstractController
 {
@@ -21,7 +23,7 @@ class TaskController extends AbstractController
     /**
      * @Route("/tasks/create", name="task_create")
      */
-    public function createAction(Request $request)
+    public function createAction(Request $request, UserService $userService)
     {
         $task = new Task();
         $form = $this->createForm(TaskType::class, $task);
@@ -31,6 +33,10 @@ class TaskController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $user = $this->getUser();
+            if(!$user instanceof User) 
+            {
+                $user = $userService->userByDefault();
+            }
             $task->setUser($user);
 
             $em->persist($task);
@@ -93,4 +99,6 @@ class TaskController extends AbstractController
 
         return $this->redirectToRoute('task_list');
     }
+
+
 }
