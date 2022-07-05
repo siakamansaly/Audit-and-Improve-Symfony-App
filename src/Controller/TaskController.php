@@ -6,18 +6,26 @@ use App\Entity\Task;
 use App\Entity\User;
 use App\Form\TaskType;
 use App\Service\UserService;
-use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 class TaskController extends AbstractController
 {
+    private ManagerRegistry $doctrine;
+
+    public function __construct(ManagerRegistry $doctrine)
+    {
+        $this->doctrine = $doctrine;
+    }
+
     /**
      * @Route("/tasks", name="task_list")
      */
     public function listAction()
     {
-        return $this->render('task/list.html.twig', ['tasks' => $this->getDoctrine()->getRepository('App\Entity\Task')->findAll()]);
+        return $this->render('task/list.html.twig', ['tasks' => $this->doctrine->getRepository('App\Entity\Task')->findAll()]);
     }
 
     /**
@@ -33,14 +41,13 @@ class TaskController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $user = $this->getUser();
-            if(!$user instanceof User) 
-            {
+            if (!$user instanceof User) {
                 $user = $userService->userByDefault();
             }
             $task->setUser($user);
 
-            $em->persist($task);
-            $em->flush();
+            $this->doctrine->getManager()->persist($task);
+            $this->doctrine->getManager()->flush();
 
             $this->addFlash('success', 'La tâche a été bien été ajoutée.');
 
@@ -60,7 +67,7 @@ class TaskController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->doctrine->getManager()->flush();
 
             $this->addFlash('success', 'La tâche a bien été modifiée.');
 
@@ -79,7 +86,7 @@ class TaskController extends AbstractController
     public function toggleTaskAction(Task $task)
     {
         $task->toggle(!$task->isDone());
-        $this->getDoctrine()->getManager()->flush();
+        $this->doctrine->getManager()->flush();
 
         $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
 
@@ -92,14 +99,11 @@ class TaskController extends AbstractController
     public function deleteTaskAction(Task $task)
     {
         $this->denyAccessUnlessGranted('TASK_DELETE', $task);
-        $em = $this->getDoctrine()->getManager();
-        $em->remove($task);
-        $em->flush();
+        $this->doctrine->getManager()->remove($task);
+        $this->doctrine->getManager()->flush();
 
         $this->addFlash('success', 'La tâche a bien été supprimée.');
 
         return $this->redirectToRoute('task_list');
     }
-
-
 }

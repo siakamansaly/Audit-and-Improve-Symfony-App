@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -14,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity
  * @UniqueEntity("email")
  */
-class User implements UserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
      * @ORM\Column(type="integer")
@@ -61,12 +62,18 @@ class User implements UserInterface
         return $this->id;
     }
 
-    public function getUserIdentifier()
+    /**
+     * @return string
+     */
+    public function getUserIdentifier(): string
     {
         return $this->getUsername();
     }
 
-    public function getUsername()
+    /**
+     * @return string
+     */
+    public function getUsername(): string
     {
         return $this->username;
     }
@@ -76,12 +83,18 @@ class User implements UserInterface
         $this->username = $username;
     }
 
-    public function getSalt()
+    /**
+     * @return string||null
+     */
+    public function getSalt(): ?string
     {
         return null;
     }
 
-    public function getPassword()
+    /**
+     * @return string
+     */
+    public function getPassword(): ?string
     {
         return $this->password;
     }
@@ -153,9 +166,8 @@ class User implements UserInterface
 
     /**
      * Check if user is anonymous.
-     * @return bool
      */
-    public function isAnonymous() : bool
+    public function isAnonymous(): bool
     {
         return 'anonymous' === $this->getUsername();
     }

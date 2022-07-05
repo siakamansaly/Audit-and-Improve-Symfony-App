@@ -4,21 +4,29 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
-use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Routing\Annotation\Route;
 
 class UserController extends AbstractController
 {
+    private ManagerRegistry $doctrine;
+
+    public function __construct(ManagerRegistry $doctrine)
+    {
+        $this->doctrine = $doctrine;
+    }
+
     /**
      * @Route("/users", name="user_list")
      * @IsGranted("ROLE_ADMIN" , message="Cette page est réservée aux administrateurs")
      */
     public function listAction()
     {
-        return $this->render('user/list.html.twig', ['users' => $this->getDoctrine()->getRepository('App\Entity\User')->findAll()]);
+        return $this->render('user/list.html.twig', ['users' => $this->doctrine->getRepository('App\Entity\User')->findAll()]);
     }
 
     /**
@@ -33,13 +41,11 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            // $password = $this->get('security.password_encoder')->encodePassword($user, $user->getPassword());
             $password = $passwordHasher->hashPassword($user, $user->getPassword());
             $user->setPassword($password);
 
-            $em->persist($user);
-            $em->flush();
+            $this->doctrine->getManager()->persist($user);
+            $this->doctrine->getManager()->flush();
 
             $this->addFlash('success', "L'utilisateur a bien été ajouté.");
 
@@ -64,7 +70,7 @@ class UserController extends AbstractController
             $password = $passwordHasher->hashPassword($user, $user->getPassword());
             $user->setPassword($password);
 
-            $this->getDoctrine()->getManager()->flush();
+            $this->doctrine->getManager()->flush();
 
             $this->addFlash('success', "L'utilisateur a bien été modifié");
 
