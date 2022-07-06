@@ -27,7 +27,7 @@ class UserService
         $anonymousUser = $this->em->getRepository(User::class)->findOneBy(['username' => 'anonymous']);
 
         if (null === $anonymousUser) {
-            $anonymousUser = $this->createAnonymousUser();
+            $anonymousUser = $this->createUser();
         }
 
         return $anonymousUser;
@@ -38,12 +38,12 @@ class UserService
      *
      * @return User $User
      */
-    public function createAnonymousUser(): User
+    public function createUser(?string $username="anonymous", ?string $pass="password"): User
     {
         $anonymousUser = new User();
-        $anonymousUser->setUsername('anonymous');
-        $anonymousUser->setEmail('anonymous@anonymous.fr');
-        $password = $this->hasher->hashPassword($anonymousUser, 'password');
+        $anonymousUser->setUsername($username);
+        $anonymousUser->setEmail($username.'@anonymous.fr');
+        $password = $this->hasher->hashPassword($anonymousUser, $pass);
         $anonymousUser->setPassword($password);
         $anonymousUser->setRoles(['ROLE_USER']);
         $this->em->persist($anonymousUser);
