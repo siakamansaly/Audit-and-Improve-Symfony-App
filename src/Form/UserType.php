@@ -10,8 +10,20 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
+/**
+ * Class User Form Builder.
+ *
+ * Build the form to create a user.
+ *
+ * @author  Siaka MANSALY <siaka.mansaly@gmail.com>
+ *
+ * @package: App\Form
+ */
 class UserType extends AbstractType
 {
+    /**
+     * Build the form to create or edit a user.
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -27,7 +39,7 @@ class UserType extends AbstractType
             ->add('roles', ChoiceType::class, [
                 'choices' => [
                     'Admin' => 'ROLE_ADMIN',
-                    'User' => 'ROLE_USER'
+                    'User' => 'ROLE_USER',
                 ],
                 'multiple' => true,
                 'empty_data' => [],
@@ -36,10 +48,12 @@ class UserType extends AbstractType
                 'required' => true,
                 'constraints' => [
                     new \Symfony\Component\Validator\Constraints\NotBlank([
-                        'message' => 'Vous devez choisir au moins un rôle.'
-                    ])
+                        'message' => 'Vous devez choisir au moins un rôle.',
+                    ]),
                     ],
             ])
         ;
+
+        $options = [];
     }
 }

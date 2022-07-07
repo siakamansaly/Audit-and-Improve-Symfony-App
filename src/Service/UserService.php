@@ -6,11 +6,25 @@ use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
+/**
+ * Methods to manage users.
+ *
+ * Provides methods to manage users
+ *
+ * @author  Siaka MANSALY <siaka.mansaly@gmail.com>
+ *
+ * @package: App\Service
+ */
 class UserService
 {
     private EntityManagerInterface $em;
     private UserPasswordHasherInterface $hasher;
 
+    /**
+     * The constructor.
+     *
+     * @return void
+     */
     public function __construct(EntityManagerInterface $em, UserPasswordHasherInterface $hasher)
     {
         $this->em = $em;
@@ -22,12 +36,12 @@ class UserService
      *
      * @return User $User
      */
-    public function userByDefault(): User
+    public function userByDefault(?string $username = 'anonymous'): User
     {
-        $anonymousUser = $this->em->getRepository(User::class)->findOneBy(['username' => 'anonymous']);
+        $anonymousUser = $this->em->getRepository(User::class)->findOneBy(['username' => $username]);
 
         if (null === $anonymousUser) {
-            $anonymousUser = $this->createUser();
+            $anonymousUser = $this->createUser($username);
         }
 
         return $anonymousUser;
@@ -38,7 +52,7 @@ class UserService
      *
      * @return User $User
      */
-    public function createUser(?string $username="anonymous", ?string $pass="password"): User
+    public function createUser(?string $username = 'anonymous', ?string $pass = 'password'): User
     {
         $anonymousUser = new User();
         $anonymousUser->setUsername($username);

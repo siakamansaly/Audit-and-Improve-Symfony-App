@@ -15,6 +15,15 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordC
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
+/**
+ * Class SecurityControllerAuthenticator
+ *
+ * Check if the user is authenticated and redirect to the login page if not.
+ *
+ * @author  Siaka MANSALY <siaka.mansaly@gmail.com>
+ *
+ * @package: App\Security
+ */
 class SecurityControllerAuthenticator extends AbstractLoginFormAuthenticator
 {
     use TargetPathTrait;
@@ -23,11 +32,17 @@ class SecurityControllerAuthenticator extends AbstractLoginFormAuthenticator
 
     private UrlGeneratorInterface $urlGenerator;
 
+    /**
+     * The constructor.
+     */
     public function __construct(UrlGeneratorInterface $urlGenerator)
     {
         $this->urlGenerator = $urlGenerator;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function authenticate(Request $request): Passport
     {
         $username = $request->request->get('_username', '');
@@ -43,6 +58,9 @@ class SecurityControllerAuthenticator extends AbstractLoginFormAuthenticator
         );
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
@@ -54,6 +72,9 @@ class SecurityControllerAuthenticator extends AbstractLoginFormAuthenticator
         //throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function getLoginUrl(Request $request): string
     {
         return $this->urlGenerator->generate(self::LOGIN_ROUTE);

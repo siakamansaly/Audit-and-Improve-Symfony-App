@@ -8,41 +8,68 @@ use App\Form\TaskType;
 use App\Service\UserService;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * Controller to manage tasks.
+ *
+ * Provides routes for managing tasks (CRUD)
+ *
+ * @author  Siaka MANSALY <siaka.mansaly@gmail.com>
+ *
+ * @package: App\Controller
+ */
 class TaskController extends AbstractController
 {
     private ManagerRegistry $doctrine;
 
-    public function __construct(ManagerRegistry $doctrine)
+    private UserService $userService;
+
+    /**
+     * TaskController constructor.
+     *
+     * @return void
+     */
+    public function __construct(ManagerRegistry $doctrine, UserService $userService)
     {
         $this->doctrine = $doctrine;
+        $this->userService = $userService;
     }
 
     /**
+     * Task list page.
+     *
      * @Route("/tasks", name="task_list")
      */
-    public function listAction()
+    public function listAction(): Response
     {
         return $this->render('task/list.html.twig', ['tasks' => $this->doctrine->getRepository('App\Entity\Task')->findAll()]);
     }
 
     /**
+     * Task creation page.
+     *
      * @Route("/tasks/create", name="task_create")
+     *
+     * @return Response|RedirectResponse
      */
-    public function createAction(Request $request, UserService $userService)
+    public function createAction(Request $request): Response
     {
         $task = new Task();
+        /**
+         * @var FormInterface $form
+         */
         $form = $this->createForm(TaskType::class, $task);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
             $user = $this->getUser();
             if (!$user instanceof User) {
-                $user = $userService->userByDefault();
+                $user = $this->userService->userByDefault();
             }
             $task->setUser($user);
 
@@ -58,10 +85,17 @@ class TaskController extends AbstractController
     }
 
     /**
+     * Task edition page.
+     *
      * @Route("/tasks/{id}/edit", name="task_edit")
+     *
+     * @return Response|RedirectResponse
      */
-    public function editAction(Task $task, Request $request)
+    public function editAction(Task $task, Request $request): Response
     {
+        /**
+         * @var FormInterface $form
+         */
         $form = $this->createForm(TaskType::class, $task);
 
         $form->handleRequest($request);
@@ -81,22 +115,40 @@ class TaskController extends AbstractController
     }
 
     /**
+     * Task is done or not.
+     *
      * @Route("/tasks/{id}/toggle", name="task_toggle")
      */
-    public function toggleTaskAction(Task $task)
+    public function toggleTaskAction(Task $task): RedirectResponse
     {
         $task->toggle(!$task->isDone());
         $this->doctrine->getManager()->flush();
 
-        $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
+        switch ($task->isDone()) {
+            case true:
+                $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
+                break;
+            case false:
+                $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme non faite.', $task->getTitle()));
+                break;
+        }
 
         return $this->redirectToRoute('task_list');
     }
 
     /**
+     * Task deletion page.
+     *
+     * This route is used to delete a task.
+     * Only the owner of the task can delete it.
+     * Only user (with role ['ROLE_ADMIN']) can delete tasks of user anonymous.
+     * Otherwise, a 403 error is returned.
+     *
      * @Route("/tasks/{id}/delete", name="task_delete")
+     *
+     * @throws \LogicException if the user is not the owner of the task
      */
-    public function deleteTaskAction(Task $task)
+    public function deleteTaskAction(Task $task): RedirectResponse
     {
         $this->denyAccessUnlessGranted('TASK_DELETE', $task);
         $this->doctrine->getManager()->remove($task);

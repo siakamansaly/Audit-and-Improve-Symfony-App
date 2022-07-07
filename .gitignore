@@ -26,4 +26,9 @@
 
 ###< tools ###
 /tools/
+/tests/coverage/
+/.phpdoc/
+/.vscode/
+/docs/
+phpDocumentor.phar
 ###> tools ###
