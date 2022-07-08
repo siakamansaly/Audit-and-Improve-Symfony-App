@@ -7,9 +7,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Class Task Form Builder.
+ * Task Form Builder.
  *
- * Build the form to create a task.
+ * Build the form to create or edit a task.
  *
  * @author  Siaka MANSALY <siaka.mansaly@gmail.com>
  *

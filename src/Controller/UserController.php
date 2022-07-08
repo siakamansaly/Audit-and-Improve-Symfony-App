@@ -5,17 +5,15 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserType;
 use Doctrine\Persistence\ManagerRegistry;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 /**
  * Controller to manage users.
- *
- * Provides routes for managing users (CRUD)
  *
  * @author  Siaka MANSALY <siaka.mansaly@gmail.com>
  *
@@ -26,7 +24,7 @@ class UserController extends AbstractController
     private ManagerRegistry $doctrine;
 
     /**
-     * UserController constructor.
+     * The constructor.
      *
      * @return void
      */
@@ -57,6 +55,7 @@ class UserController extends AbstractController
     public function createAction(Request $request, UserPasswordHasherInterface $passwordHasher): Response
     {
         $user = new User();
+
         $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);

@@ -9,9 +9,9 @@ use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 
 /**
- * AppFixtures class.
- *
- * Add all test data to the database.
+ * Load test data into the database.
+ * 
+ * Command to load data: php bin/console doctrine:fixtures:load
  *
  * @author  Siaka MANSALY <siaka.mansaly@gmail.com>
  *
@@ -22,7 +22,7 @@ class AppFixtures extends Fixture
     private UserService $userService;
 
     /**
-     * AppFixtures constructor.
+     * The constructor.
      */
     public function __construct(UserService $userService)
     {
@@ -32,22 +32,20 @@ class AppFixtures extends Fixture
     /**
      * Load datas in database.
      *
-     * Create a user anonymous and tasks for the user anonymous.
+     * 1- Create a user anonymous and tasks for the user anonymous.
      *
-     * Create users and tasks for each user.
+     * 2- Create users and tasks for each user.
      *
-     * Create admin user.
+     * 3- Create admin user.
      *
-     * Create tasks without linked user.
+     * 4- Create tasks without linked user.
      */
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create();
 
-        // Create anonymous user in database.
         $anonymousUser = $this->userService->createUser();
 
-        // Create tasks for anonymous user.
         for ($i = 0; $i < rand(1, 7); ++$i) {
             $task = new Task();
             $task->setTitle($faker->word());
@@ -57,11 +55,10 @@ class AppFixtures extends Fixture
             $manager->flush();
         }
 
-        // Create users in database.
         for ($i = 0; $i < rand(2, 5); ++$i) {
+            
             $user = $this->userService->createUser('user'.$i);
 
-            // Create tasks for user.
             for ($j = 0; $j < rand(1, 7); ++$j) {
                 $task = new Task();
                 $task->setTitle($faker->word());
@@ -72,13 +69,11 @@ class AppFixtures extends Fixture
             }
         }
 
-        // Create admin in database.
         $admin = $this->userService->createUser('admin');
         $admin->setRoles(['ROLE_ADMIN']);
         $manager->persist($admin);
         $manager->flush();
 
-        // Create tasks without user.
         for ($i = 0; $i < rand(1, 7); ++$i) {
             $task = new Task();
             $task->setTitle($faker->word());

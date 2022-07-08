@@ -7,9 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Controller to display default pages.
- *
- * Provides a route for default pages
+ * Controller to manage default pages.
  *
  * @author  Siaka MANSALY <siaka.mansaly@gmail.com>
  *
@@ -18,9 +16,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class DefaultController extends AbstractController
 {
     /**
-     * Display Homepage of application ToDo & Co.
+     * Display Homepage of application.
      *
      * This is the homepage of the application.
+     *
      * Only the user who is logged in can see this page.
      *
      * @Route("/", name="homepage")

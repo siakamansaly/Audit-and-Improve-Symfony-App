@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Authenticator\AbstractLoginFormAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
@@ -16,7 +17,7 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 /**
- * Class SecurityControllerAuthenticator
+ * Security Controller Authenticator.
  *
  * Check if the user is authenticated and redirect to the login page if not.
  *
@@ -41,7 +42,16 @@ class SecurityControllerAuthenticator extends AbstractLoginFormAuthenticator
     }
 
     /**
-     * {@inheritdoc}
+     * Create a passport for the current request.
+     *
+     * The passport contains the user, credentials and any additional information that has to be checked by the
+     * Symfony Security system. For example, a login form authenticator will probably return a passport
+     *  containing the user, the presented password and the CSRF token value.
+     *
+     * You may throw any AuthenticationException in this method in case of error
+     * (e.g. a UserNotFoundException when the user cannot be found).
+     *
+     * @throws AuthenticationException
      */
     public function authenticate(Request $request): Passport
     {
@@ -59,7 +69,12 @@ class SecurityControllerAuthenticator extends AbstractLoginFormAuthenticator
     }
 
     /**
-     * {@inheritdoc}
+     * Called when authentication executed and was successful!
+     *
+     * This should return the Response sent back to the user, like a RedirectResponse to the last page they visited.
+     *
+     * If you return null, the current request will continue, and the user will be authenticated.
+     * This makes sense, for example, with an API.
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
@@ -67,13 +82,11 @@ class SecurityControllerAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
 
-        // For example:
         return new RedirectResponse($this->urlGenerator->generate('homepage'));
-        //throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }
 
     /**
-     * {@inheritdoc}
+     * Return the URL to the login page.
      */
     protected function getLoginUrl(Request $request): string
     {

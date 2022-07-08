@@ -7,16 +7,15 @@ use App\Entity\User;
 use App\Form\TaskType;
 use App\Service\UserService;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Controller to manage tasks.
- *
- * Provides routes for managing tasks (CRUD)
  *
  * @author  Siaka MANSALY <siaka.mansaly@gmail.com>
  *
@@ -29,9 +28,7 @@ class TaskController extends AbstractController
     private UserService $userService;
 
     /**
-     * TaskController constructor.
-     *
-     * @return void
+     * The constructor.
      */
     public function __construct(ManagerRegistry $doctrine, UserService $userService)
     {
@@ -59,9 +56,7 @@ class TaskController extends AbstractController
     public function createAction(Request $request): Response
     {
         $task = new Task();
-        /**
-         * @var FormInterface $form
-         */
+
         $form = $this->createForm(TaskType::class, $task);
 
         $form->handleRequest($request);
@@ -93,9 +88,6 @@ class TaskController extends AbstractController
      */
     public function editAction(Task $task, Request $request): Response
     {
-        /**
-         * @var FormInterface $form
-         */
         $form = $this->createForm(TaskType::class, $task);
 
         $form->handleRequest($request);
@@ -139,14 +131,9 @@ class TaskController extends AbstractController
     /**
      * Task deletion page.
      *
-     * This route is used to delete a task.
-     * Only the owner of the task can delete it.
-     * Only user (with role ['ROLE_ADMIN']) can delete tasks of user anonymous.
-     * Otherwise, a 403 error is returned.
-     *
      * @Route("/tasks/{id}/delete", name="task_delete")
      *
-     * @throws \LogicException if the user is not the owner of the task
+     * @throws AccessDeniedException "TASK_DELETE" Voter is not granted.
      */
     public function deleteTaskAction(Task $task): RedirectResponse
     {

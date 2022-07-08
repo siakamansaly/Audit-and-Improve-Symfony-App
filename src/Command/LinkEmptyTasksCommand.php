@@ -11,9 +11,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * Command to link tasks to a user in the database.
+ * Command to link orphan tasks in the database.
  *
- * All tasks without a user are linked to user anonymous in the database.
+ * This command fixes non-user related tasks in the database.
+ *
+ * At the end of the process, the tasks will be linked to a default user named "anonymous".
  *
  * Command : php bin/console tasks:linker
  *
@@ -30,7 +32,7 @@ class LinkEmptyTasksCommand extends Command
     private UserService $userService;
 
     /**
-     * LinkEmptyTasksCommand constructor.
+     * The constructor.
      *
      * @return void
      */
@@ -46,19 +48,23 @@ class LinkEmptyTasksCommand extends Command
      */
     protected function configure(): void
     {
-        $this
-            ->setDescription(self::$defaultDescription)
-        ;
+        $this->setDescription(self::$defaultDescription);
     }
 
     /**
      * Execute the command.
      *
-     * Get all tasks without a user and link them to an anonymous user in the database.
+     * Check if the user named "anonymous" exists, if not create it.
+     *
+     * Get all userless tasks and link them to an user named "anonymous" in the database.
+     *
+     * @return int SUCCESS (0)| FAILURE (1)| INVALID (2)
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $execute = new SymfonyStyle($input, $output);
+
+        $anonymousUser = $this->userService->userByDefault();
 
         $tasks = $this->entityManager->getRepository(Task::class)->findBy(['user' => null]);
 
@@ -70,7 +76,7 @@ class LinkEmptyTasksCommand extends Command
         $execute->section('Details');
 
         foreach ($tasks as $task) {
-            $task->setUser($this->userService->userByDefault());
+            $task->setUser($anonymousUser);
             $this->entityManager->persist($task);
             $this->entityManager->flush();
             $output->writeln('Task #'.$task->getId().' linked to anonymous user.');

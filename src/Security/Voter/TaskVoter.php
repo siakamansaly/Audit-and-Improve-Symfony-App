@@ -10,7 +10,7 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * Voter class for tasks.
+ * Task voter.
  *
  * Check if the user is allowed to edit or delete a task.
  *
@@ -32,35 +32,32 @@ class TaskVoter extends Voter
     }
 
     /**
-     * {@inheritdoc}
+     * Determines if the attribute and subject are supported by this voter.
      */
     protected function supports(string $attribute, $subject): bool
     {
-        // replace with your own logic
-        // https://symfony.com/doc/current/security/voters.html
-        // dd($attribute, $subject);
         return in_array($attribute, [self::DELETE]) && $subject instanceof \App\Entity\Task;
     }
 
     /**
-     * {@inheritdoc}
+     * Perform a single access check operation on a given attribute, subject and token.
+     * 
+     * It is safe to assume that $attribute and $subject already passed the supports() method.
      */
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
         $user = $token->getUser();
-        // if the user is anonymous, do not grant access
+
         if (!$user instanceof UserInterface) {
             return false;
         }
 
         $isAnonymous = (null === $subject->getUser()) ? true : ($subject->getUser()->isAnonymous());
 
-        // if the user is admin, they can do anything
         if ($this->security->isGranted('ROLE_ADMIN', $user) && $isAnonymous) {
             return true;
         }
 
-        // ... (check conditions and return true to grant permission) ...
         switch ($attribute) {
             case self::DELETE:
                 return $this->canDelete($subject, $user);

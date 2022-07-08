@@ -11,9 +11,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Class User Form Builder.
+ * User Form Builder.
  *
- * Build the form to create a user.
+ * Build the form to create or edit a user.
  *
  * @author  Siaka MANSALY <siaka.mansaly@gmail.com>
  *
