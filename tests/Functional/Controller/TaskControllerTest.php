@@ -76,13 +76,17 @@ class TaskControllerTest extends AbstractWebTestCase
         $this->assertSelectorExists('div.alert.alert-success:contains("La tâche a bien été modifiée.")');
     }
 
-    public function testToggleTaskAction(): void
+    public function testToggleTaskActionDoneAndNotDone(): void
     {
         $this->client->followRedirects();
         $task = $this->manager->getRepository(Task::class)->findOneByTitle('test modifié'.$this->date->format('Y-m-d'));
         $taskId = $task->getId();
 
         $this->client->loginUser($this->user);
+        $this->client->request('GET', '/tasks/'.$taskId.'/toggle');
+
+        $this->assertSelectorExists('div.alert.alert-success');
+
         $this->client->request('GET', '/tasks/'.$taskId.'/toggle');
 
         $this->assertSelectorExists('div.alert.alert-success');

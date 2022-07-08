@@ -81,7 +81,8 @@ abstract class AbstractWebTestCase extends WebTestCase
         if (null !== $user) {
             $tasks = $user->getTasks();
             foreach ($tasks as $task) {
-                $this->manager->remove($task);
+                $task->setUser(null);
+                $this->manager->persist($task);
             }
             $this->manager->remove($user);
             $this->manager->flush();

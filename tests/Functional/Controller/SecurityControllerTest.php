@@ -2,8 +2,8 @@
 
 namespace App\Tests\Functional\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
 use App\Tests\Functional\AbstractWebTestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 class SecurityControllerTest extends AbstractWebTestCase
 {
@@ -23,25 +23,38 @@ class SecurityControllerTest extends AbstractWebTestCase
     {
         $this->client->followRedirects();
         $crawler = $this->client->request('GET', '/login');
+
         $user = $this->getUser();
         $form = $crawler->selectButton('Se connecter')->form([
             '_username' => $user->getUsername(),
-            '_password' => $user->getPassword(), ]);
+            '_password' => 'password', ]);
         $crawler = $this->client->submit($form);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_OK); // 200
+
+    }
+
+    public function testAccessPageLoginWhenAlreadyConnected(): void
+    {
+        $user = $this->getUser();
+        $this->client->loginUser($user);
+        $this->client->request('GET', '/login');
+        $this->client->followRedirects();
+        $this->assertResponseRedirects('/');
     }
 
     public function testAccessPageLoginSuccessfullWithRedirect(): void
     {
+        $user = $this->getUser();
         $this->client->followRedirects();
         $crawler = $this->client->request('GET', '/');
-        $user = $this->getUser();
+        
         $form = $crawler->selectButton('Se connecter')->form([
             '_username' => $user->getUsername(),
-            '_password' => $user->getPassword(), ]);
+            '_password' => 'password', ]);
         $crawler = $this->client->submit($form);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_OK); // 200
     }
+
 }
