@@ -10,7 +10,7 @@ services:
 php:
     - 7.2
 install:
-    - composer install --prefer-dist --no-interaction
+    - composer install --prefer-dist --no-interaction --ignore-platform-reqs
     - php bin/console doctrine:database:create --env=test
     - php bin/console doctrine:schema:update --force --env=test
     - php bin/console doctrine:fixtures:load -n --env=test
