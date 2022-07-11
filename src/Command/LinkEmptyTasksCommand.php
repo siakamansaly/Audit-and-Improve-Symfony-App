@@ -6,55 +6,83 @@ use App\Entity\Task;
 use App\Service\UserService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
+/**
+ * Command to link orphan tasks in the database.
+ *
+ * This command fixes non-user related tasks in the database.
+ *
+ * At the end of the process, the tasks will be linked to a default user named "anonymous".
+ *
+ * Command : php bin/console tasks:linker
+ *
+ * @author  Siaka MANSALY <siaka.mansaly@gmail.com>
+ *
+ * @package: App\Command
+ */
 class LinkEmptyTasksCommand extends Command
 {
     protected static $defaultName = 'tasks:linker';
     protected static $defaultDescription = 'Used to link empty tasks to an anonymous user.';
-    private EntityManagerInterface $em;
+
+    private EntityManagerInterface $entityManager;
     private UserService $userService;
 
-    public function __construct(EntityManagerInterface $em, UserService $userService)
+    /**
+     * The constructor.
+     *
+     * @return void
+     */
+    public function __construct(EntityManagerInterface $entityManager, UserService $userService)
     {
-        $this->em = $em;
+        $this->entityManager = $entityManager;
         $this->userService = $userService;
         parent::__construct();
     }
+
+    /**
+     * Configure the command.
+     */
     protected function configure(): void
     {
-        $this
-            ->setDescription(self::$defaultDescription)
-        ;
+        $this->setDescription(self::$defaultDescription);
     }
 
+    /**
+     * Execute the command.
+     *
+     * Check if the user named "anonymous" exists, if not create it.
+     *
+     * Get all userless tasks and link them to an user named "anonymous" in the database.
+     *
+     * @return int SUCCESS (0)| FAILURE (1)| INVALID (2)
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $io = new SymfonyStyle($input, $output);
-        
-        // Select all tasks without user
-        $tasks = $this->em->getRepository(Task::class)->findBy(['user' => null]);
+        $execute = new SymfonyStyle($input, $output);
 
-        $io->title('Tasks linker');
-        $io->info(['Found ' . count($tasks) . ' tasks without user.']);
-        if(count($tasks) === 0)
-        {
+        $anonymousUser = $this->userService->userByDefault();
+
+        $tasks = $this->entityManager->getRepository(Task::class)->findBy(['user' => null]);
+
+        $execute->title('Tasks linker');
+        $execute->info(['Found '.count($tasks).' tasks without user.']);
+        if (0 === count($tasks)) {
             return 0;
         }
-        $io->section('Details');
-        // For each task, link it to an anonymous user
+        $execute->section('Details');
+
         foreach ($tasks as $task) {
-            $task->setUser($this->userService->userByDefault());
-            $this->em->persist($task);
-            $this->em->flush();
-            $output->writeln('Task #' . $task->getId() . ' linked to anonymous user.');
+            $task->setUser($anonymousUser);
+            $this->entityManager->persist($task);
+            $this->entityManager->flush();
+            $output->writeln('Task #'.$task->getId().' linked to anonymous user.');
         }
-        $io->newLine();
-        $io->success('Tasks linked to anonymous user.');
+        $execute->newLine();
+        $execute->success('Tasks linked to anonymous user.');
 
         return Command::SUCCESS;
     }

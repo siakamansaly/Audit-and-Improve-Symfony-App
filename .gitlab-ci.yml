@@ -1,0 +1,21 @@
+image: php:7.4-apache
+services:
+  - name: mysql:5.7
+    alias: mysql
+variables:
+  MYSQL_ROOT_PASSWORD: db_password
+  MYSQL_DATABASE: db_name
+  MYSQL_USER: db_user
+  MYSQL_PASSWORD: db_password
+  DATABASE_URL: "mysql://db_user:db_password@mysql:3306/db_name"
+before_script:
+  - apt-get update && apt-get install -y git libzip-dev
+  - curl -sS https://getcomposer.org/installer | php
+  - php composer.phar install
+  - docker-php-ext-install mysqli pdo pdo_mysql zip
+  - php bin/console doctrine:database:drop --force --env=test
+  - php bin/console doctrine:database:create --env=test
+  - php bin/console doctrine:schema:update --force --env=test
+test:
+  script:
+    - vendor/bin/phpunit --configuration phpunit.xml --coverage-text --colors=never

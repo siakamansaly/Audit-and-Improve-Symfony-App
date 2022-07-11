@@ -19,7 +19,10 @@
 
     <testsuites>
         <testsuite name="Project Test Suite">
-            <directory>tests</directory>
+            <directory>tests/DataFixtures</directory>
+            <directory>tests/Unit</directory>
+            <directory>tests/Integration</directory>
+            <directory>tests/Functional</directory>
         </testsuite>
     </testsuites>
 
@@ -27,7 +30,13 @@
         <include>
             <directory suffix=".php">src</directory>
         </include>
+        <report>
+            <html outputDirectory="tests\coverage\html-coverage" lowUpperBound="35" highLowerBound="70"/>
+        </report>
     </coverage>
+    <logging>
+        <testdoxHtml outputFile="tests\coverage\testdox.html"/>
+    </logging>
 
     <listeners>
         <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />

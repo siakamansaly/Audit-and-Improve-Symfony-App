@@ -4,42 +4,68 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
+/**
+ * Controller to manage users.
+ *
+ * @author  Siaka MANSALY <siaka.mansaly@gmail.com>
+ *
+ * @package: App\Controller
+ */
 class UserController extends AbstractController
 {
+    private ManagerRegistry $doctrine;
+
     /**
-     * @Route("/users", name="user_list")
-     * @IsGranted("ROLE_ADMIN" , message="Cette page est réservée aux administrateurs")
+     * The constructor.
+     *
+     * @return void
      */
-    public function listAction()
+    public function __construct(ManagerRegistry $doctrine)
     {
-        return $this->render('user/list.html.twig', ['users' => $this->getDoctrine()->getRepository('App\Entity\User')->findAll()]);
+        $this->doctrine = $doctrine;
     }
 
     /**
-     * @Route("/users/create", name="user_create")
+     * User list page.
+     *
+     * @Route("/users", name="user_list")
      * @IsGranted("ROLE_ADMIN" , message="Cette page est réservée aux administrateurs")
      */
-    public function createAction(Request $request, UserPasswordHasherInterface $passwordHasher)
+    public function listAction(): Response
+    {
+        return $this->render('user/list.html.twig', ['users' => $this->doctrine->getRepository('App\Entity\User')->findAll()]);
+    }
+
+    /**
+     * User creation page.
+     *
+     * @Route("/users/create", name="user_create")
+     * @IsGranted("ROLE_ADMIN" , message="Cette page est réservée aux administrateurs")
+     *
+     * @return Response|RedirectResponse
+     */
+    public function createAction(Request $request, UserPasswordHasherInterface $passwordHasher): Response
     {
         $user = new User();
+
         $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            // $password = $this->get('security.password_encoder')->encodePassword($user, $user->getPassword());
             $password = $passwordHasher->hashPassword($user, $user->getPassword());
             $user->setPassword($password);
 
-            $em->persist($user);
-            $em->flush();
+            $this->doctrine->getManager()->persist($user);
+            $this->doctrine->getManager()->flush();
 
             $this->addFlash('success', "L'utilisateur a bien été ajouté.");
 
@@ -50,21 +76,24 @@ class UserController extends AbstractController
     }
 
     /**
+     * User edition page.
+     *
      * @Route("/users/{id}/edit", name="user_edit")
      * @IsGranted("ROLE_ADMIN" , message="Cette page est réservée aux administrateurs")
+     *
+     * @return Response|RedirectResponse
      */
-    public function editAction(User $user, Request $request, UserPasswordHasherInterface $passwordHasher)
+    public function editAction(User $user, Request $request, UserPasswordHasherInterface $passwordHasher): Response
     {
         $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // $password = $this->get('security.password_encoder')->encodePassword($user, $user->getPassword());
             $password = $passwordHasher->hashPassword($user, $user->getPassword());
             $user->setPassword($password);
 
-            $this->getDoctrine()->getManager()->flush();
+            $this->doctrine->getManager()->flush();
 
             $this->addFlash('success', "L'utilisateur a bien été modifié");
 
