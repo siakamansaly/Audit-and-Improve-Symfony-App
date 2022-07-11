@@ -1,5 +1,4 @@
 language: php
-sudo: false
 cache:
     directories:
         - $HOME/.composer/cache
@@ -8,11 +7,11 @@ warnings_are_errors: false
 services:
     - mysql
 php:
-    - 7.2
+    - 7.2.5
 install:
     - composer install --prefer-dist --no-interaction --ignore-platform-reqs
     - php bin/console doctrine:database:create --env=test
     - php bin/console doctrine:schema:update --force --env=test
     - php bin/console doctrine:fixtures:load -n --env=test
 script:
-    - ./vendor/bin/simple-phpunit --coverage-text --colors
+    - php bin/phpunit --coverage-text --colors
