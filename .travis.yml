@@ -7,7 +7,7 @@ warnings_are_errors: false
 services:
     - mysql
 php:
-    - 7.2.5
+    - 7.4.27
 install:
     - composer install --prefer-dist --no-interaction --ignore-platform-reqs
     - php bin/console doctrine:database:create --env=test
