@@ -58,7 +58,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="json", nullable=true)
      *
-     * @var array the user roles
+     * @var array<mixed> the user roles
      */
     private $roles = [];
 
@@ -125,9 +125,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * Get the user password.
      *
-     * @return string|null the user password
+     * @return string the user password
      */
-    public function getPassword(): ?string
+    public function getPassword(): string
     {
         return $this->password;
     }
@@ -162,14 +162,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->email = $email;
     }
 
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
     }
 
     /**
      * Get the user roles.
      *
-     * @return array the user roles
+     * @return array<mixed> the user roles
      */
     public function getRoles(): array
     {
@@ -183,7 +183,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * Set the user roles.
      *
-     * @param array $roles the user roles
+     * @param array<mixed> $roles the user roles
      */
     public function setRoles(array $roles): self
     {

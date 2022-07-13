@@ -9,7 +9,10 @@ use Symfony\Component\Validator\Validation;
 
 class UserTypeTest extends TypeTestCase
 {
-    protected function getExtensions()
+    /**
+     * @return array<mixed>
+     */
+    protected function getExtensions(): array
     {
         $validator = Validation::createValidator();
 
@@ -18,7 +21,7 @@ class UserTypeTest extends TypeTestCase
         ];
     }
 
-    public function testSubmitValidDataUserForm()
+    public function testSubmitValidDataUserForm(): void
     {
         $formData = [
             'username' => 'toto',
@@ -49,7 +52,7 @@ class UserTypeTest extends TypeTestCase
         $this->assertEquals($expected->getRoles(), $model->getRoles());
     }
 
-    public function testCustomFormViewUserForm()
+    public function testCustomFormViewUserForm(): void
     {
         $Data = [
             'username' => 'toto',

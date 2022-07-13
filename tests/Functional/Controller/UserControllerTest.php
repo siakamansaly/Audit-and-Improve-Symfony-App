@@ -2,11 +2,15 @@
 
 namespace App\Tests\Functional\Controller;
 
+use App\Entity\User;
 use App\Tests\Functional\AbstractWebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserControllerTest extends AbstractWebTestCase
 {
+    private User $user;
+    private User $admin;
+    
     public function SetUp(): void
     {
         parent::SetUp();

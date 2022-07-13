@@ -25,18 +25,24 @@ class SecurityControllerTest extends AbstractWebTestCase
         $crawler = $this->client->request('GET', '/login');
 
         $user = $this->getUser();
+        if (!$user) {
+            $this->fail('User not found');
+        }
+
         $form = $crawler->selectButton('Se connecter')->form([
             '_username' => $user->getUsername(),
             '_password' => 'password', ]);
         $crawler = $this->client->submit($form);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_OK); // 200
-
     }
 
     public function testAccessPageLoginWhenAlreadyConnected(): void
     {
         $user = $this->getUser();
+        if (!$user) {
+            $this->fail('User not found');
+        }
         $this->client->loginUser($user);
         $this->client->request('GET', '/login');
         $this->client->followRedirects();
@@ -46,9 +52,12 @@ class SecurityControllerTest extends AbstractWebTestCase
     public function testAccessPageLoginSuccessfullWithRedirect(): void
     {
         $user = $this->getUser();
+        if (!$user) {
+            $this->fail('User not found');
+        }
         $this->client->followRedirects();
         $crawler = $this->client->request('GET', '/');
-        
+
         $form = $crawler->selectButton('Se connecter')->form([
             '_username' => $user->getUsername(),
             '_password' => 'password', ]);
@@ -56,5 +65,4 @@ class SecurityControllerTest extends AbstractWebTestCase
 
         $this->assertResponseStatusCodeSame(Response::HTTP_OK); // 200
     }
-
 }

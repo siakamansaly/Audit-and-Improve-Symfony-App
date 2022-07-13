@@ -7,7 +7,7 @@ use Symfony\Component\Form\Test\TypeTestCase;
 
 class TaskTypeTest extends TypeTestCase
 {
-    public function testSubmitValidDataTaskForm()
+    public function testSubmitValidDataTaskForm(): void
     {
         $formData = [
             'title' => 'test',
@@ -30,7 +30,7 @@ class TaskTypeTest extends TypeTestCase
         $this->assertEquals($expected->getContent(), $model->getContent());
     }
 
-    public function testCustomFormViewTaskForm()
+    public function testCustomFormViewTaskForm(): void
     {
         $formData = new Task();
 
