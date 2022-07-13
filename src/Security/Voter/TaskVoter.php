@@ -21,7 +21,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class TaskVoter extends Voter
 {
     public const DELETE = 'TASK_DELETE';
-    private $security;
+    private Security $security;
 
     /**
      * The constructor.
@@ -52,6 +52,9 @@ class TaskVoter extends Voter
             return false;
         }
 
+        if(!$subject instanceof Task) {
+            return false;
+        }
         $isAnonymous = (null === $subject->getUser()) ? true : ($subject->getUser()->isAnonymous());
 
         if ($this->security->isGranted('ROLE_ADMIN', $user) && $isAnonymous) {
@@ -61,7 +64,6 @@ class TaskVoter extends Voter
         switch ($attribute) {
             case self::DELETE:
                 return $this->canDelete($subject, $user);
-                break;
         }
 
         return false;
@@ -71,11 +73,11 @@ class TaskVoter extends Voter
      * Check if the user is allowed to delete a task.
      *
      * @param Task $task the task to delete
-     * @param User $user the user who wants to delete the task
+     * @param UserInterface $user the user who wants to delete the task
      *
      * @return bool true if the user is allowed to delete the task, false otherwise
      */
-    public function canDelete(Task $task, User $user): bool
+    public function canDelete(Task $task, UserInterface $user): bool
     {
         return $task->getUser() === $user;
     }

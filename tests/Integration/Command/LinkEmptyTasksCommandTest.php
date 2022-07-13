@@ -9,7 +9,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 class LinkEmptyTasksCommandTest extends KernelTestCase
 {
-    public function testExecuteWithAction()
+    public function testExecuteWithAction(): void
     {
         $kernel = self::bootKernel();
 
@@ -18,8 +18,12 @@ class LinkEmptyTasksCommandTest extends KernelTestCase
         $task->setContent('Test description');
         $task->setUser(null);
         $task->setCreatedAt(new \DateTime());
-        $kernel->getContainer()->get('doctrine')->getManager()->persist($task);
-        $kernel->getContainer()->get('doctrine')->getManager()->flush();
+
+        $manager = $kernel->getContainer()->get('doctrine.orm.entity_manager');
+        if($manager instanceof \Doctrine\ORM\EntityManager) {
+            $manager->persist($task);
+            $manager->flush();
+        }
 
         $application = new Application($kernel);
 
@@ -32,7 +36,7 @@ class LinkEmptyTasksCommandTest extends KernelTestCase
         $this->assertStringContainsString('[OK] Tasks linked to anonymous user.', $output);
     }
 
-    public function testExecuteWithoutAction()
+    public function testExecuteWithoutAction(): void
     {
         $kernel = self::bootKernel();
         $application = new Application($kernel);

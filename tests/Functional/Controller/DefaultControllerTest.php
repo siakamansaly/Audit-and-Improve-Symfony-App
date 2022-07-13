@@ -7,17 +7,19 @@ use App\Tests\Functional\AbstractWebTestCase;
 
 class DefaultControllerTest extends AbstractWebTestCase
 {
-    public function testAccessPageIndexWhenUserNotConnected()
+    public function testAccessPageIndexWhenUserNotConnected(): void
     {
         $this->client->request('GET', '/');
         $this->client->followRedirects();
         $this->assertResponseRedirects('/login');
     }
 
-    public function testAccessPageIndexWhenUserConnected()
+    public function testAccessPageIndexWhenUserConnected(): void
     {
-        /** @var User $user */
         $user = $this->getUser();
+        if (!$user) {
+            $this->fail('User not found');
+        }
 
         $this->client->loginUser($user);
 

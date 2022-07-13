@@ -59,7 +59,7 @@ class Task
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="tasks")
      * @ORM\JoinColumn(nullable=true)
      *
-     * @var User the task user
+     * @var User|null the task user
      */
     private $user;
 
@@ -165,7 +165,7 @@ class Task
     /**
      * Set the task user.
      *
-     * @param User $user
+     * @param User|null $user
      */
     public function setUser(?User $user): self
     {

@@ -55,15 +55,22 @@ class SecurityControllerAuthenticator extends AbstractLoginFormAuthenticator
      */
     public function authenticate(Request $request): Passport
     {
+        /** @var string $username */
         $username = $request->request->get('_username', '');
 
         $request->getSession()->set(Security::LAST_USERNAME, $username);
 
+        /** @var string $password */
+        $password = $request->request->get('_password', '');
+
+        /** @var string $csrf */
+        $csrf = $request->request->get('_csrf_token', '');
+
         return new Passport(
             new UserBadge($username),
-            new PasswordCredentials($request->request->get('_password', '')),
+            new PasswordCredentials($password),
             [
-                new CsrfTokenBadge('authenticate', $request->request->get('_csrf_token')),
+                new CsrfTokenBadge('authenticate', $csrf),
             ]
         );
     }

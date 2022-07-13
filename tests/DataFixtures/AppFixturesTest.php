@@ -4,23 +4,25 @@ namespace App\Tests\DataFixtures;
 
 use App\DataFixtures\AppFixtures;
 use App\Tests\Functional\AbstractWebTestCase;
-use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Component\HttpFoundation\Response;
+use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
+use Liip\TestFixturesBundle\Services\DatabaseTools\AbstractDatabaseTool;
 
 class AppFixturesTest extends AbstractWebTestCase
 {
-    /**
-     * @var AbstractDatabaseTool
-     */
-    protected $databaseTool;
+
+    protected AbstractDatabaseTool $databaseTool;
 
     public function setUp(): void
     {
         parent::setUp();
+        if(!$this->getContainer()->get(DatabaseToolCollection::class) instanceof DatabaseToolCollection) {
+            $this->fail('DatabaseToolCollection not found');
+        }
         $this->databaseTool = $this->getContainer()->get(DatabaseToolCollection::class)->get();
     }
 
-    public function testLoadDataFixtures()
+    public function testLoadDataFixtures(): void
     {
         $this->databaseTool->loadFixtures([AppFixtures::class]);
 

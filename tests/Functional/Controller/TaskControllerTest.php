@@ -2,12 +2,21 @@
 
 namespace App\Tests\Functional\Controller;
 
+use DateTime;
 use App\Entity\Task;
-use Symfony\Component\HttpFoundation\Response;
+use App\Entity\User;
 use App\Tests\Functional\AbstractWebTestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 class TaskControllerTest extends AbstractWebTestCase
 {
+    private User $user;
+    private User $userAnonymous;
+    private User $userOther;
+    private DateTime $date;
+    private Task $taskAnonyme;
+    private Task $taskOther;
+
     public function SetUp(): void
     {
         parent::SetUp();
@@ -64,7 +73,10 @@ class TaskControllerTest extends AbstractWebTestCase
     public function testEditTaskAction(): void
     {
         $this->client->followRedirects();
-        $task = $this->manager->getRepository(Task::class)->findOneByTitle('test'.$this->date->format('Y-m-d'));
+        $task = $this->manager->getRepository(Task::class)->findOneBy(['title' => 'test'.$this->date->format('Y-m-d')]);
+        if(!$task) {
+            $this->fail('Task not found');
+        }
         $taskId = $task->getId();
 
         $this->client->loginUser($this->user);
@@ -79,7 +91,10 @@ class TaskControllerTest extends AbstractWebTestCase
     public function testToggleTaskActionDoneAndNotDone(): void
     {
         $this->client->followRedirects();
-        $task = $this->manager->getRepository(Task::class)->findOneByTitle('test modifié'.$this->date->format('Y-m-d'));
+        $task = $this->manager->getRepository(Task::class)->findOneBy(['title' => 'test modifié'.$this->date->format('Y-m-d')]);
+        if(!$task) {
+            $this->fail('Task not found');
+        }
         $taskId = $task->getId();
 
         $this->client->loginUser($this->user);
@@ -95,7 +110,10 @@ class TaskControllerTest extends AbstractWebTestCase
     public function testDeleteOwnerTaskAction(): void
     {
         $this->client->followRedirects();
-        $task = $this->manager->getRepository(Task::class)->findOneByTitle('test modifié'.$this->date->format('Y-m-d'));
+        $task = $this->manager->getRepository(Task::class)->findOneBy(['title' => 'test modifié'.$this->date->format('Y-m-d')]);
+        if(!$task) {
+            $this->fail('Task not found');
+        }
         $taskId = $task->getId();
 
         $this->client->loginUser($this->user);

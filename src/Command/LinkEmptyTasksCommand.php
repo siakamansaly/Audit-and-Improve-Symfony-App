@@ -26,7 +26,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class LinkEmptyTasksCommand extends Command
 {
     protected static $defaultName = 'tasks:linker';
-    protected static $defaultDescription = 'Used to link empty tasks to an anonymous user.';
 
     private EntityManagerInterface $entityManager;
     private UserService $userService;
@@ -48,7 +47,7 @@ class LinkEmptyTasksCommand extends Command
      */
     protected function configure(): void
     {
-        $this->setDescription(self::$defaultDescription);
+        $this->setDescription('Link orphan tasks in the database.');
     }
 
     /**

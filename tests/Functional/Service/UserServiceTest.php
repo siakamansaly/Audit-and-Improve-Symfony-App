@@ -8,10 +8,14 @@ use App\Tests\Functional\AbstractWebTestCase;
 
 class UserServiceTest extends AbstractWebTestCase
 {
+    private UserService $userService;
+
     public function SetUp(): void
     {
         parent::SetUp();
-        $this->userService = $this->client->getContainer()->get(UserService::class);
+        if($this->client->getContainer()->get(UserService::class) instanceof UserService) {
+            $this->userService = $this->client->getContainer()->get(UserService::class);
+        } 
         $this->removeUser('anonymousTest');
     }
 

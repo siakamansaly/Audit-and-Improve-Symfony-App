@@ -50,7 +50,7 @@ class UserController extends AbstractController
      * @Route("/users/create", name="user_create")
      * @IsGranted("ROLE_ADMIN" , message="Cette page est réservée aux administrateurs")
      *
-     * @return Response|RedirectResponse
+     * @return Response
      */
     public function createAction(Request $request, UserPasswordHasherInterface $passwordHasher): Response
     {
@@ -81,7 +81,7 @@ class UserController extends AbstractController
      * @Route("/users/{id}/edit", name="user_edit")
      * @IsGranted("ROLE_ADMIN" , message="Cette page est réservée aux administrateurs")
      *
-     * @return Response|RedirectResponse
+     * @return Response
      */
     public function editAction(User $user, Request $request, UserPasswordHasherInterface $passwordHasher): Response
     {

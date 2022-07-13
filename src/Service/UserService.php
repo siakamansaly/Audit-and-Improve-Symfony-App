@@ -36,7 +36,7 @@ class UserService
      *
      * @return User $User
      */
-    public function userByDefault(?string $username = 'anonymous'): User
+    public function userByDefault(string $username = 'anonymous'): User
     {
         $anonymousUser = $this->entityManager->getRepository(User::class)->findOneBy(['username' => $username]);
 
@@ -52,7 +52,7 @@ class UserService
      *
      * @return User $User
      */
-    public function createUser(?string $username = 'anonymous', ?string $pass = 'password'): User
+    public function createUser(string $username = 'anonymous', string $pass = 'password'): User
     {
         $anonymousUser = new User();
         $anonymousUser->setUsername($username);
