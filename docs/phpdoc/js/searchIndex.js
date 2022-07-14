@@ -26,11 +26,6 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/App-Command-LinkEmptyTasksCommand.html#property_defaultName"
         },                {
-            "fqsen": "\\App\\Command\\LinkEmptyTasksCommand\u003A\u003A\u0024defaultDescription",
-            "name": "defaultDescription",
-            "summary": "",
-            "url": "classes/App-Command-LinkEmptyTasksCommand.html#property_defaultDescription"
-        },                {
             "fqsen": "\\App\\Command\\LinkEmptyTasksCommand\u003A\u003A\u0024entityManager",
             "name": "entityManager",
             "summary": "",
