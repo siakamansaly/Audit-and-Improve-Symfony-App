@@ -119,7 +119,6 @@ To get a local copy up and running follow these simple example steps :
    php bin/phpunit
    ```
 
-
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- CONTRIBUTING -->
@@ -166,9 +165,6 @@ Thanks to my mentor [Hamza](https://github.com/Hamzasakrani) for his guidance an
   <li><a href="https://www.phpdoc.org/" target="_blank">PHP Documentor</a></li>
   <li><a href="https://phpstan.org/user-guide/getting-started" target="_blank">PHP Stan</a></li>
   <li><a href="https://phpunit.de/index.html" target="_blank">PHP Unit</a></li>
-  
-  
-  
 </ul>
 
 <p align="right">(<a href="#top">back to top</a>)</p>
