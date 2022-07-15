@@ -137,7 +137,7 @@ class TaskController extends AbstractController
      */
     public function deleteTaskAction(Task $task): RedirectResponse
     {
-        $this->denyAccessUnlessGranted('TASK_DELETE', $task);
+        $this->denyAccessUnlessGranted('TASK_DELETE', $task, 'Vous n\'avez pas le droit de supprimer cette tâche.');
         $this->doctrine->getManager()->remove($task);
         $this->doctrine->getManager()->flush();
 

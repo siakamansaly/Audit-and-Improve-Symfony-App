@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block header_img %}<img class="slide-image" src="{{ asset('img/todolist_content.jpg') }}" alt="todo list">{% endblock %}
+
+{% block body %}
+
+<p class="text-secondary text-center m-2 h1">Erreur {{status_code}}</p>
+<h1 class="text-center mb-4">{{exception.message}}</h1>
+<div class="text-center mb-4">
+    <a class="btn btn-xl btn-primary" href="{{path('homepage')}}" rel="noopener">
+        Retour à la page d'accueil
+    </a>
+</div>
+{% endblock %}
