@@ -139,7 +139,7 @@ Link technical documentation : https://github.com/siakamansaly/Audit-and-Improve
 ```
 
 >1.&nbsp;Fork the project then you install it.  
-Installation help : (https://github.com/siakamansaly/Audit-and-Improve-Symfony-App/blob/main/README.md)[lien documentation]
+>Installation help : https://github.com/siakamansaly/Audit-and-Improve-Symfony-App/blob/main/README.md
 
 >2.&nbsp;Create your Feature Branch (`git checkout -b feature/NewFeature`)
 
