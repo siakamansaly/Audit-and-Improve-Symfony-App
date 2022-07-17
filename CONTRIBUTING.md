@@ -1,16 +1,27 @@
 <!-- CONTRIBUTING -->
 ## Contributing
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+If you want to contribute to the project, please follow the following best practices: :
 
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
+```sh
+- Respect the PSR-1, PSR-2, PSR-12 standards of the PHP language. These recommendations are part of the coding standards to be respected.
+Link PHP-FIG : https://www.php-fig.org/psr/
 
-1.&nbsp;Fork the Project
+- Respect Symfony best practices
+Link Symfony : https://symfony.com/doc/5.4/best_practices.html
+
+- Respect the structure of the files set up and document your code.
+Link technical documentation : https://github.com/siakamansaly/Audit-and-Improve-Symfony-App/tree/main/docs
+```
+
+1.&nbsp;Fork the project then you install it.  
+Installation help : https://github.com/siakamansaly/Audit-and-Improve-Symfony-App/blob/main/README.md
 
 2.&nbsp;Create your Feature Branch (`git checkout -b feature/NewFeature`)
 
-3.&nbsp;Create your test and run PHPUnit (`php bin/phpunit`)
+2.&nbsp;Make your Feature
+
+3.&nbsp;Create your Test and run PHPUnit (`php bin/phpunit`)
 
 4.&nbsp;Commit your Changes (`git commit -m 'Add some NewFeature'`)
 
