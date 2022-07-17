@@ -15,17 +15,17 @@ Link Symfony : https://symfony.com/doc/5.4/best_practices.html
 Link technical documentation : https://github.com/siakamansaly/Audit-and-Improve-Symfony-App/tree/main/docs
 ```
 
->1.&nbsp;Fork the project then you install it.
->Installation help : https://github.com/siakamansaly/Audit-and-Improve-Symfony-App/blob/main/README.md
+1.&nbsp;Fork the project then you install it.
+Installation help : https://github.com/siakamansaly/Audit-and-Improve-Symfony-App/blob/main/README.md
 
->2.&nbsp;Create your Feature Branch (`git checkout -b feature/NewFeature`)
+2.&nbsp;Create your Feature Branch (`git checkout -b feature/NewFeature`)
 
->3.&nbsp;Make your Feature
+3.&nbsp;Make your Feature
 
->4.&nbsp;Create your Test and run PHPUnit (`php bin/phpunit`)
+4.&nbsp;Create your Test and run PHPUnit (`php bin/phpunit`)
 
->5.&nbsp;Commit your Changes (`git commit -m 'Add some NewFeature'`)
+5.&nbsp;Commit your Changes (`git commit -m 'Add some NewFeature'`)
 
->6.&nbsp;Push to the Branch (`git push origin feature/NewFeature`)
+6.&nbsp;Push to the Branch (`git push origin feature/NewFeature`)
 
->7.&nbsp;Open a Pull Request
+7.&nbsp;Open a Pull Request
