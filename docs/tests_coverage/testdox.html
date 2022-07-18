@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <title>Test Documentation</title>
+        <style>
+            body {
+                text-rendering: optimizeLegibility;
+                font-variant-ligatures: common-ligatures;
+                font-kerning: normal;
+                margin-left: 2em;
+                background-color: #ffffff;
+                color: #000000;
+            }
+
+            body > ul > li {
+                font-family: Source Serif Pro, PT Sans, Trebuchet MS, Helvetica, Arial;
+                font-size: 2em;
+            }
+
+            h2 {
+                font-family: Tahoma, Helvetica, Arial;
+                font-size: 3em;
+            }
+
+            ul {
+                list-style: none;
+                margin-bottom: 1em;
+            }
+        </style>
+    </head>
+    <body>
+        <h2 id="App\Tests\DataFixtures\AppFixturesTest">App Fixtures (App\Tests\DataFixtures\AppFixtures)</h2>
+        <ul>
+            <li style="color: #555753;">✓ Load data fixtures</li>
+        </ul>
+        <h2 id="App\Tests\Unit\Entity\TaskTest">Task (App\Tests\Unit\Entity\Task)</h2>
+        <ul>
+            <li style="color: #555753;">✓ Is true</li>
+            <li style="color: #555753;">✓ Is false</li>
+            <li style="color: #555753;">✓ Is empty</li>
+        </ul>
+        <h2 id="App\Tests\Unit\Entity\UserTest">User (App\Tests\Unit\Entity\User)</h2>
+        <ul>
+            <li style="color: #555753;">✓ Is true</li>
+            <li style="color: #555753;">✓ Is false</li>
+            <li style="color: #555753;">✓ Is empty</li>
+            <li style="color: #555753;">✓ Add get remove tasks</li>
+        </ul>
+        <h2 id="App\Tests\Unit\Form\TaskTypeTest">Task Type (App\Tests\Unit\Form\TaskType)</h2>
+        <ul>
+            <li style="color: #555753;">✓ Submit valid data task form</li>
+            <li style="color: #555753;">✓ Custom form view task form</li>
+        </ul>
+        <h2 id="App\Tests\Unit\Form\UserTypeTest">User Type (App\Tests\Unit\Form\UserType)</h2>
+        <ul>
+            <li style="color: #555753;">✓ Submit valid data user form</li>
+            <li style="color: #555753;">✓ Custom form view user form</li>
+        </ul>
+        <h2 id="App\Tests\Integration\Command\LinkEmptyTasksCommandTest">Link Empty Tasks Command (App\Tests\Integration\Command\LinkEmptyTasksCommand)</h2>
+        <ul>
+            <li style="color: #555753;">✓ Execute with action</li>
+            <li style="color: #555753;">✓ Execute without action</li>
+        </ul>
+        <h2 id="App\Tests\Functional\Controller\DefaultControllerTest">Default Controller (App\Tests\Functional\Controller\DefaultController)</h2>
+        <ul>
+            <li style="color: #555753;">✓ Access page index when user not connected</li>
+            <li style="color: #555753;">✓ Access page index when user connected</li>
+        </ul>
+        <h2 id="App\Tests\Functional\Controller\SecurityControllerTest">Security Controller (App\Tests\Functional\Controller\SecurityController)</h2>
+        <ul>
+            <li style="color: #555753;">✓ Access page login with bad credentials</li>
+            <li style="color: #555753;">✓ Access page login successfull without redirect</li>
+            <li style="color: #555753;">✓ Access page login when already connected</li>
+            <li style="color: #555753;">✓ Access page login successfull with redirect</li>
+        </ul>
+        <h2 id="App\Tests\Functional\Controller\TaskControllerTest">Task Controller (App\Tests\Functional\Controller\TaskController)</h2>
+        <ul>
+            <li style="color: #555753;">✓ Access page list tasks when user connected</li>
+            <li style="color: #555753;">✓ Access page list tasks when user not connected</li>
+            <li style="color: #555753;">✓ Access page create task when user connected</li>
+            <li style="color: #555753;">✓ Access page create task when user not connected</li>
+            <li style="color: #555753;">✓ Create task</li>
+            <li style="color: #555753;">✓ Edit task action</li>
+            <li style="color: #555753;">✓ Toggle task action done and not done</li>
+            <li style="color: #555753;">✓ Delete owner task action</li>
+            <li style="color: #555753;">✓ Delete task other user action</li>
+            <li style="color: #555753;">✓ Delete task anonymous by admin action</li>
+            <li style="color: #555753;">✓ Delete task anonymous by user action</li>
+        </ul>
+        <h2 id="App\Tests\Functional\Controller\UserControllerTest">User Controller (App\Tests\Functional\Controller\UserController)</h2>
+        <ul>
+            <li style="color: #555753;">✓ Access page list users when user not connected or not authorize</li>
+            <li style="color: #555753;">✓ Access page list users when user is authorize</li>
+            <li style="color: #555753;">✓ Access page create users when user not connected or not authorize</li>
+            <li style="color: #555753;">✓ Access page create users when user is authorize</li>
+            <li style="color: #555753;">✓ Access page edit users when user not connected or not authorize</li>
+            <li style="color: #555753;">✓ Access page edit users when user is authorize</li>
+        </ul>
+        <h2 id="App\Tests\Functional\Service\UserServiceTest">User Service (App\Tests\Functional\Service\UserService)</h2>
+        <ul>
+            <li style="color: #555753;">✓ User by default</li>
+        </ul>
+    </body>
+</html>
