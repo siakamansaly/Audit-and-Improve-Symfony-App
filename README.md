@@ -8,8 +8,10 @@
 <br />
 <div align="center">
   <a href="https://github.com/siakamansaly/Audit-and-Improve-Symfony-App">
-    <img src="public/img/Logo_OpenClassrooms.png" alt="Logo">
+    <img src="public/img/todolist_content.jpg" alt="Logo">
   </a>
+  <br />
+  <br />
   <h1 align="center">Audit and Improve Symfony App</h1>
   <p align="center">
     To Do & Co
