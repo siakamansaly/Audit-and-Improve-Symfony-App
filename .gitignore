@@ -20,6 +20,11 @@
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
 
+###> php-cs-fixer ###
+.php-cs-fixer.dist.php
+.php-cs-fixer.cache
+###< php-cs-fixer ###
+
 ###< upgrade-symfony-backup-files ###
 /_backup/
 ###> upgrade-symfony-backup-files ###
